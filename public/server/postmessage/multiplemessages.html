@@ -1,0 +1,46 @@
+<html>
+    <body>
+        <h1>Login</h1>
+        <form>
+            <div>
+                <label for="email">Email</label>
+                <input id="email" name="email" placeholder="email" />
+            </div>
+            <div>
+                <label for="password">Password</label>
+                <input id="password" name="password" placeholder="password" type="password"/>
+            </div>
+            <div>
+                <input id="login" type="button" value="Login" />
+            </div>
+        </form>
+    </body>
+</html>
+
+<script type="text/javascript">
+    window.addEventListener('message', function (event) {
+        switch(event.data.type) {
+            case 'prepopulate':
+                document.getElementById('email').value = event.data.data;
+                break;
+            case 'logout':
+                document.getElementById('email').value = '';
+                document.getElementById('password').value = '';
+                break;
+        }
+        console.log(window.location.pathname, 'Received', event);
+    }, false);
+
+    document.getElementById('login').addEventListener('click', function (event) {
+        var message = {
+            type: 'login',
+            data: {
+                email: 'athroener@paypal.com',
+                firstName: 'Andrew',
+                lastName: 'Throener',
+            }
+        };
+        window.parent.postMessage(message, '*');
+        console.log(window.location.pathname, 'Sent', message);
+    });
+</script>

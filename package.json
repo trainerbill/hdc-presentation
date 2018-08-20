@@ -1,0 +1,24 @@
+{
+  "name": "hdc-presentation",
+  "version": "1.0.0",
+  "description": "Repository for HDC Cross Domain Javascript Presentation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "debug": "node --nolazy --inspect-brk=9229 index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trainerbill/hdc-presentation.git"
+  },
+  "author": "Andrew Throener",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/trainerbill/hdc-presentation/issues"
+  },
+  "homepage": "https://github.com/trainerbill/hdc-presentation#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}

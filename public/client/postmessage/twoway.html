@@ -1,0 +1,27 @@
+<html>
+    <body>
+        <h1>Parent Page</h1>
+        <div>Please login below</div>
+    </body>
+</html>
+
+<script type="text/javascript">
+
+    window.addEventListener('message', function (event) {
+        alert('User logged in!');
+        console.log(window.location.pathname, 'Received', event.data);
+    });
+
+    // Create an Iframe
+    var iframe = document.createElement('iframe');
+    iframe.height = '400px';
+    iframe.width = '400px';
+    iframe.src = '../../server/postmessage/twoway.html';
+    iframe.onload = function () {
+        var message = "athroener@paypal.com";
+        iframe.contentWindow.postMessage(message, "*");
+        console.log(window.location.pathname, 'Sent', message);
+    }
+    document.body.appendChild(iframe);
+</script>
+

@@ -1,0 +1,22 @@
+<html>
+    <body>
+        <h1>Parent Page</h1>
+        <div>Please login below</div>
+    </body>
+</html>
+
+<script type="text/javascript">
+
+    // Create an Iframe
+    var iframe = document.createElement('iframe');
+    iframe.height = '400px';
+    iframe.width = '400px';
+    iframe.src = '../../server/postmessage/oneway.html';
+    iframe.onload = function () {
+        var message = "athroener@paypal.com";
+        iframe.contentWindow.postMessage(message, "*");
+        console.log(window.location.pathname, 'Sent', message);
+    }
+    document.body.appendChild(iframe);
+</script>
+

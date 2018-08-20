@@ -1,0 +1,52 @@
+<html>
+    <body>
+        <h1>Parent Page</h1>
+        <div>Please login below</div>
+        <div id="login" style="display:none">
+            <div>Welcome <span id="user"></span></div>
+            <div><button id="logout">Logout</button></div>
+        </div>
+    </body>
+</html>
+
+<script type="text/javascript">
+
+    // Create an Iframe
+    var iframe = document.createElement('iframe');
+    iframe.id = 'loginIframe';
+    iframe.height = '400px';
+    iframe.width = '400px';
+    iframe.src = '../../server/postmessage/multiplemessages.html';
+    iframe.onload = function () {
+        var message = {
+            type: "prepopulate",
+            data: "athroener@paypal.com",
+        };
+        iframe.contentWindow.postMessage(message, "*");
+        console.log(window.location.pathname, 'Sent', message);
+    }
+    document.body.appendChild(iframe);
+
+    window.addEventListener('message', function (event) {
+        switch(event.data.type) {
+            case 'login':
+                document.getElementById('loginIframe').style.display = 'none';
+                document.getElementById('user').innerHTML = event.data.data.firstName + ' ' + event.data.data.lastName + ' (' + event.data.data.email + ')';
+                document.getElementById('login').style.display = 'initial';
+                break;
+        }
+        console.log(window.location.pathname, 'Received', event);
+    });
+
+    document.getElementById('logout').addEventListener('click', function (event) {
+        var message = {
+            type: 'logout',
+        };
+        iframe.contentWindow.postMessage(message, '*');
+        document.getElementById('loginIframe').style.display = 'initial';
+        document.getElementById('login').style.display = 'none';
+        console.log(window.location.pathname, 'Sent', message);
+    });
+
+</script>
+
