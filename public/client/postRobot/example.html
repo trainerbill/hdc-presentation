@@ -1,4 +1,7 @@
 <html>
+    <head>
+        <script src="https://rawgit.com/krakenjs/post-robot/master/dist/post-robot.js"></script>
+    </head>
     <body>
         <h1>Parent Page</h1>
         <div>Please login below</div>
@@ -27,33 +30,38 @@
     iframe.id = 'loginIframe';
     iframe.height = '400px';
     iframe.width = '400px';
-    iframe.src = '../../server/postmessage/multiplemessages.html';
-    iframe.onload = function () {
-        var message = {
-            type: "prepopulate",
-            data: "athroener@paypal.com",
-        };
-        iframe.contentWindow.postMessage(message, "*");
-        console.log(window.location.pathname, 'Sent', message);
-    }
+    iframe.src = '../../server/postRobot/example.html';
     document.body.appendChild(iframe);
 
-    window.addEventListener('message', function (event) {
-        switch(event.data.type) {
-            case 'login':
+    var user;
+    postRobot.send(iframe, 'initialize', 'athroener@paypal.com')
+        .then(function (event) {
+            if(event.data) {
+                user = event.data;
                 showLoggedIn();
-                break;
-        }
-        console.log(window.location.pathname, 'Received', event);
+            } else {
+                showLoggedOut();
+            }
+        })
+        .catch(function (err) {
+            console.error(err);
+        });
+
+    
+    postRobot.on('login', function (event) {
+        user = event.data;
+        showLoggedIn();
     });
 
     document.getElementById('logout').addEventListener('click', function (event) {
-        var message = {
-            type: 'logout',
-        };
-        iframe.contentWindow.postMessage(message, '*');
-        showLoggedOut();
-        console.log(window.location.pathname, 'Sent', message);
+        user.logout()
+            .then(function (event) {
+                showLoggedOut();
+                user = undefined;
+            })
+            .catch(function (err) {
+                console.error(err);
+            });
     });
 
 </script>

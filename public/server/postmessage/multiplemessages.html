@@ -18,6 +18,34 @@
 </html>
 
 <script type="text/javascript">
+
+    function getUser() {
+        return window.localStorage.getItem('user') ? JSON.parse(window.localStorage.getItem('user')) : null;
+    }
+
+    function createUser() {
+        return {
+            email: document.getElementById('email').value,
+            firstName: 'Andrew',
+            lastName: 'Throener'
+        }
+    }
+
+    function sendLogin() {
+        var user = getUser() || createUser();
+        // user.logout = () => window.localStorage.removeItem('user');
+        var message = {
+            type: 'login',
+            data: user
+        };
+        console.log(window.location.pathname, 'Sent', message);
+        window.parent.postMessage(message, '*');
+    }
+
+    if (getUser()) {
+        sendLogin();
+    }
+
     window.addEventListener('message', function (event) {
         switch(event.data.type) {
             case 'prepopulate':
@@ -26,21 +54,16 @@
             case 'logout':
                 document.getElementById('email').value = '';
                 document.getElementById('password').value = '';
+                window.localStorage.removeItem('user');
                 break;
         }
         console.log(window.location.pathname, 'Received', event);
     }, false);
 
     document.getElementById('login').addEventListener('click', function (event) {
-        var message = {
-            type: 'login',
-            data: {
-                email: 'athroener@paypal.com',
-                firstName: 'Andrew',
-                lastName: 'Throener',
-            }
-        };
-        window.parent.postMessage(message, '*');
-        console.log(window.location.pathname, 'Sent', message);
+        sendLogin();
+        window.localStorage.setItem('user', JSON.stringify(createUser()));
     });
+
+    
 </script>

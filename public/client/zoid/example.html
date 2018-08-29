@@ -1,0 +1,55 @@
+<html>
+    <head>
+            <script src="https://rawgit.com/krakenjs/zoid/master/dist/zoid.js"></script>
+            <script src="../../server/zoid/userComponent.js"></script>
+    </head>
+    <body>
+        <h1>Parent Page</h1>
+        <div>Please login below</div>
+        <div id="user-component"></div>
+        <div id="login" style="display:none">
+            <div>Welcome <span id="user"></span></div>
+            <div><button id="logout">Logout</button></div>
+        </div>
+    </body>
+</html>
+
+<script type="text/javascript">
+
+    function showLoggedIn() {
+        document.getElementById('loginIframe').style.display = 'none';
+        document.getElementById('user').innerHTML = user.firstName + ' ' + user.lastName + ' (' + user.email + ')';
+        document.getElementById('login').style.display = 'initial';
+    }
+
+    function showLoggedOut() {
+        document.getElementById('loginIframe').style.display = 'initial';
+        document.getElementById('login').style.display = 'none';
+    }
+
+    var user;
+    UserComponent.render({
+        email: 'athroener@paypal.com',
+        onLogin: (muser) => {
+            if(muser) {
+                user = muser;
+                this.hide();
+            } else {
+                this.show();
+            }
+        }
+    }, 'user-component');
+
+    document.getElementById('logout').addEventListener('click', function (event) {
+        user.logout()
+            .then(function (event) {
+                showLoggedOut();
+                user = undefined;
+            })
+            .catch(function (err) {
+                console.error(err);
+            });
+    });
+
+</script>
+

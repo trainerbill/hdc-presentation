@@ -1,0 +1,60 @@
+<html>
+    <head>
+        <script src="https://rawgit.com/krakenjs/zoid/master/dist/zoid.js"></script>
+        <script src="userComponent.js"></script>
+    </head>
+    <body>
+        <h1>Login</h1>
+        <form>
+            <div>
+                <label for="email">Email</label>
+                <input id="email" name="email" placeholder="email" />
+            </div>
+            <div>
+                <label for="password">Password</label>
+                <input id="password" name="password" placeholder="password" type="password"/>
+            </div>
+            <div>
+                <input id="login" type="button" value="Login" />
+            </div>
+        </form>
+    </body>
+</html>
+
+<script type="text/javascript">
+
+    function getUser() {
+        if (!window.localStorage.getItem('user'))
+            return;
+        return createUser(JSON.parse(window.localStorage.getItem('user')));
+    }
+
+    function createUser(user) {
+        user.logout = () => { 
+            window.localStorage.removeItem('user');
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
+        };
+        return user;
+    }
+
+    // Set prefilled email
+    document.getElementById('email').value = window.xprops.email;
+
+    // Check if user is already logged in
+    var user = getUser();
+    if (user) {
+        window.xprops.onLogin(user);
+    }
+        
+    // Set login on click
+    document.getElementById('login').addEventListener('click', function (event) {
+        var user = createUser({
+            email: document.getElementById('email').value,
+            firstName: 'Andrew',
+            lastName: 'Throener'
+        });
+        window.localStorage.setItem('user', JSON.stringify(user));
+        window.xprops.onLogin(user);
+    });
+</script>
