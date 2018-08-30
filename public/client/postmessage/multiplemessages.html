@@ -10,7 +10,7 @@
 </html>
 
 <script type="text/javascript">
-
+    var user;
     function showLoggedIn() {
         document.getElementById('loginIframe').style.display = 'none';
         document.getElementById('user').innerHTML = user.firstName + ' ' + user.lastName + ' (' + user.email + ')';
@@ -41,6 +41,7 @@
     window.addEventListener('message', function (event) {
         switch(event.data.type) {
             case 'login':
+                user = event.data.data;
                 showLoggedIn();
                 break;
         }

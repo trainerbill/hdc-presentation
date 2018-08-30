@@ -17,25 +17,27 @@
 <script type="text/javascript">
 
     function showLoggedIn() {
-        document.getElementById('loginIframe').style.display = 'none';
         document.getElementById('user').innerHTML = user.firstName + ' ' + user.lastName + ' (' + user.email + ')';
         document.getElementById('login').style.display = 'initial';
+        component.hide();
     }
 
     function showLoggedOut() {
-        document.getElementById('loginIframe').style.display = 'initial';
         document.getElementById('login').style.display = 'none';
+        component.show();
     }
 
     var user;
+    var component;
     UserComponent.render({
         email: 'athroener@paypal.com',
-        onLogin: (muser) => {
+        onLogin: function (muser) {
+            component = this;
             if(muser) {
                 user = muser;
-                this.hide();
+                showLoggedIn();
             } else {
-                this.show();
+                showLoggedOut();
             }
         }
     }, 'user-component');

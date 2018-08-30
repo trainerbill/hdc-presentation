@@ -44,7 +44,8 @@
     // Check if user is already logged in
     var user = getUser();
     if (user) {
-        window.xprops.onLogin(user);
+        window.xprops.onLogin(user)
+            .then(() => document.getElementById('email').value = user.email);
     }
         
     // Set login on click
